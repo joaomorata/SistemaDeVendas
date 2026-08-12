@@ -1,0 +1,103 @@
+﻿@model IEnumerable<TelaLoginCrud.Models.Venda>
+
+@{
+    ViewData["Title"] = "Gerenciamento de Vendas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Ícones do Bootstrap via CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container my-4">
+    <!-- Cabeçalho do Painel -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h1 class="h2 text-primary fw-bold mb-1">
+                <i class="bi bi-cart-check-fill me-2"></i>Painel de Vendas
+            </h1>
+            <p class="text-muted small mb-0">Acompanhe e gerencie o histórico das vendas cadastradas.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 py-2">
+            <i class="bi bi-plus-circle-fill me-1"></i> Nova Venda
+        </a>
+    </div>
+
+    <!-- Tabela em Card Elevado -->
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark text-uppercase small">
+                        <tr>
+                            <th class="ps-4">@Html.DisplayNameFor(model => model.NomeProd)</th>
+                            <th class="text-center">@Html.DisplayNameFor(model => model.Quant)</th>
+                            <th class="text-end">@Html.DisplayNameFor(model => model.Preco)</th>
+                            <th class="text-center">@Html.DisplayNameFor(model => model.DataVenda)</th>
+                            <th class="text-center pe-4">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold text-dark">
+                                        <i class="bi bi-box-seam me-2 text-secondary"></i>@Html.DisplayFor(modelItem => item.NomeProd)
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                                            @Html.DisplayFor(modelItem => item.Quant) un
+                                        </span>
+                                    </td>
+                                    <td class="text-end fw-bold text-success">
+                                        @item.Preco.ToString("C")
+                                    </td>
+                                    <td class="text-center text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i>@item.DataVenda.ToString("dd/MM/yyyy")
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.IdVenda" class="btn btn-outline-warning" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-action="Details" asp-route-id="@item.IdVenda" class="btn btn-outline-info" title="Detalhes">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.IdVenda" class="btn btn-outline-danger" title="Excluir">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                                    Nenhuma venda cadastrada até o momento.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="bg-light border-top">
+                        <tr class="fw-bold">
+                            <td class="ps-4 text-end text-uppercase small text-muted">Totais da Lista:</td>
+                            <td class="text-center">
+                                <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+                                    @(Model != null ? Model.Sum(item => item.Quant) : 0) un
+                                </span>
+                            </td>
+                            <td class="text-end text-success fs-5">
+                                @(Model != null ? Model.Sum(item => item.Quant * item.Preco).ToString("C") : "R$ 0,00")
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
