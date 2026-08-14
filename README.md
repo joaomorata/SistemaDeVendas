@@ -74,11 +74,11 @@ A interface foi desenvolvida utilizando:
 
 ## Painel de Vendas (Listagem)
 
----
+![Painel venda](TelaLoginCrud/imagens/painel-cadastro.png)
 
 ## Cadastrar Nova Venda
 
----
+![cadastro venda](TelaLoginCrud/imagens/cadastro-venda.png)
 
 # ▶️ Como Executar o Projeto
 
