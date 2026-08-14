@@ -74,7 +74,7 @@ A interface foi desenvolvida utilizando:
 
 ## Painel de Vendas (Listagem)
 
-![Painel venda](TelaLoginCrud/imagens/painel-cadastro.png)
+![Painel venda](TelaLoginCrud/imagens/painel-venda.png)
 
 ## Cadastrar Nova Venda
 
