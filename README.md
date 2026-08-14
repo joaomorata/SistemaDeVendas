@@ -70,7 +70,7 @@ A interface foi desenvolvida utilizando:
 
 ## Tela de Cadastro de Usuário (Criar Nova Conta)
 
-![Tela cadastro](TelaLoginCrud/imagens/tela-cadastro.png)
+![Tela cadastro](TelaLoginCrud/imagens/tela_cadastro.png)
 
 ## Painel de Vendas (Listagem)
 
