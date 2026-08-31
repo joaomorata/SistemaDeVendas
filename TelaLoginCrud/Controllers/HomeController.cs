@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using TelaLoginCrud.Areas.Identity.Data;
 using TelaLoginCrud.Models;
 
 namespace TelaLoginCrud.Controllers
@@ -8,15 +10,19 @@ namespace TelaLoginCrud.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly TelaLoginContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(TelaLoginContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.TotalClientes = await _context.Cliente.CountAsync();
+            ViewBag.PacotesPendentes = await _context.Pacote.CountAsync(p => !p.Coletado);
+            ViewBag.RotasAbertas = await _context.Rota.CountAsync(r => r.Status != StatusRota.Concluida);
+            ViewBag.TotalVendas = await _context.Venda.CountAsync();
             return View();
         }
 

@@ -1,0 +1,75 @@
+@model IEnumerable<TelaLoginCrud.Models.Pacote>
+
+@{
+    ViewData["Title"] = "Pacotes";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <div>
+            <h1 class="h2 text-primary fw-bold mb-1">
+                <i class="bi bi-box-seam-fill me-2"></i>Pacotes
+            </h1>
+            <p class="text-muted small mb-0">Pacotes a coletar em cada cliente.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 py-2">
+            <i class="bi bi-plus-circle-fill me-1"></i> Novo Pacote
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark text-uppercase small">
+                        <tr>
+                            <th class="ps-4">Descrição</th>
+                            <th>Cliente</th>
+                            <th class="text-center">Peso</th>
+                            <th class="text-center">Situação</th>
+                            <th class="text-center pe-4">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-semibold">@item.Descricao</td>
+                                    <td class="text-muted">@item.Cliente?.Nome</td>
+                                    <td class="text-center">@item.Peso.ToString("0.00") kg</td>
+                                    <td class="text-center">
+                                        @if (item.Coletado)
+                                        {
+                                            <span class="badge bg-success rounded-pill px-3 py-2">Coletado</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">Pendente</span>
+                                        }
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger" title="Excluir"><i class="bi bi-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                                    Nenhum pacote cadastrado.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

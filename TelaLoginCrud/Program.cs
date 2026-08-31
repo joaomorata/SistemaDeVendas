@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TelaLoginCrud.Areas.Identity.Data;
+using TelaLoginCrud.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("TelaLoginContextConnection") ?? throw new InvalidOperationException("Connection string 'TelaLoginContextConnection' not found.");
 
@@ -8,12 +9,18 @@ builder.Services.AddDbContext<TelaLoginContext>(options => options.UseSqlServer(
 
 builder.Services.AddDefaultIdentity<Usuario>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<TelaLoginContext>();
 
-// Add services to the container.
+builder.Services.AddHttpClient<GeocodingService>(client =>
+{
+    client.BaseAddress = new Uri("https://nominatim.openstreetmap.org/");
+    client.DefaultRequestHeaders.Add("User-Agent", "TelaLoginCrud");
+});
+
+builder.Services.AddScoped<OtimizadorRota>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

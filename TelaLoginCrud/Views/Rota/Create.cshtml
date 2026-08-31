@@ -1,0 +1,63 @@
+@model TelaLoginCrud.Models.RotaCreateViewModel
+
+@{
+    ViewData["Title"] = "Nova Rota";
+}
+
+<div class="container my-4" style="max-width: 720px;">
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-primary text-white py-3 rounded-top">
+            <h4 class="mb-0 fw-bold fs-5"><i class="bi bi-geo-alt-fill me-2"></i>Montar Rota de Coleta</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label fw-semibold"></label>
+                    <input asp-for="Nome" class="form-control" placeholder="Ex: Coleta segunda-feira" />
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="EnderecoPartida" class="form-label fw-semibold"></label>
+                    <input asp-for="EnderecoPartida" class="form-control" placeholder="Endereço do ponto de partida" />
+                </div>
+
+                <label class="form-label fw-semibold">Clientes na rota</label>
+                @if (Model.ClientesDisponiveis.Any())
+                {
+                    <div class="border rounded-3 p-3 mb-4" style="max-height: 320px; overflow-y: auto;">
+                        @foreach (var cliente in Model.ClientesDisponiveis)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="ClientesSelecionados" value="@cliente.Id" id="cliente-@cliente.Id" />
+                                <label class="form-check-label" for="cliente-@cliente.Id">
+                                    @cliente.Nome <span class="text-muted small">- @cliente.Endereco, @cliente.Cidade</span>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        Nenhum cliente com coordenadas cadastradas. Cadastre clientes com endereço válido primeiro.
+                    </div>
+                }
+
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i> Voltar
+                    </a>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="bi bi-diagram-3 me-1"></i> Gerar Rota
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

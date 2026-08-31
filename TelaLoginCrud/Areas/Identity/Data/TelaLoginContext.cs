@@ -1,4 +1,3 @@
-﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,11 +15,25 @@ public class TelaLoginContext : IdentityDbContext<Usuario>
 
     public DbSet<Venda> Venda { get; set; }
 
+    public DbSet<Cliente> Cliente { get; set; }
+
+    public DbSet<Pacote> Pacote { get; set; }
+
+    public DbSet<Rota> Rota { get; set; }
+
+    public DbSet<RotaParada> RotaParada { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new ConfigUser());
+
+        builder.Entity<RotaParada>()
+            .HasOne(p => p.Cliente)
+            .WithMany()
+            .HasForeignKey(p => p.ClienteId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     public class ConfigUser : IEntityTypeConfiguration<Usuario>

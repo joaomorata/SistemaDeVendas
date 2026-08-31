@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TelaLoginCrud.Areas.Identity.Data;
 
@@ -11,9 +12,11 @@ using TelaLoginCrud.Areas.Identity.Data;
 namespace TelaLoginCrud.Migrations
 {
     [DbContext(typeof(TelaLoginContext))]
-    partial class TelaLoginContextModelSnapshot : ModelSnapshot
+    [Migration("20260831133340_AddClientesPacotesRotas")]
+    partial class AddClientesPacotesRotas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

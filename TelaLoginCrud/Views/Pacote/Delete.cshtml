@@ -1,0 +1,28 @@
+@model TelaLoginCrud.Models.Pacote
+
+@{
+    ViewData["Title"] = "Excluir Pacote";
+}
+
+<div class="container my-4" style="max-width: 600px;">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-header bg-danger text-white py-3">
+            <h4 class="mb-0 fw-bold fs-5"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Exclusão</h4>
+        </div>
+        <div class="card-body p-4">
+            <p class="mb-4">Deseja remover o pacote <strong>@Model.Descricao</strong> do cliente <strong>@Model.Cliente?.Nome</strong>?</p>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">
+                        <i class="bi bi-trash-fill me-1"></i> Sim, Excluir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

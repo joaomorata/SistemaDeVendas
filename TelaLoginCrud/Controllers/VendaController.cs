@@ -11,7 +11,7 @@ using TelaLoginCrud.Models;
 
 namespace TelaLoginCrud.Controllers
 {
-    [Authorize ]
+    [Authorize]
     public class VendaController : Controller
     {
         private readonly TelaLoginContext _context;
@@ -21,13 +21,11 @@ namespace TelaLoginCrud.Controllers
             _context = context;
         }
 
-        // GET: Venda
         public async Task<IActionResult> Index()
         {
             return View(await _context.Venda.ToListAsync());
         }
 
-        // GET: Venda/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,15 +43,11 @@ namespace TelaLoginCrud.Controllers
             return View(venda);
         }
 
-        // GET: Venda/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Venda/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdVenda,NomeProd,Quant,Preco,DataVenda")] Venda venda)
@@ -67,7 +61,6 @@ namespace TelaLoginCrud.Controllers
             return View(venda);
         }
 
-        // GET: Venda/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,9 +76,6 @@ namespace TelaLoginCrud.Controllers
             return View(venda);
         }
 
-        // POST: Venda/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdVenda,NomeProd,Quant,Preco,DataVenda")] Venda venda)
@@ -118,7 +108,6 @@ namespace TelaLoginCrud.Controllers
             return View(venda);
         }
 
-        // GET: Venda/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +125,6 @@ namespace TelaLoginCrud.Controllers
             return View(venda);
         }
 
-        // POST: Venda/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
