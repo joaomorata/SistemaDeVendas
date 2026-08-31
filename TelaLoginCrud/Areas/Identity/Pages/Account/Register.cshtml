@@ -14,7 +14,26 @@
         </div>
         <div class="card-body p-4">
             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                <div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Nome" class="form-label fw-semibold">Nome</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input asp-for="Input.Nome" class="form-control" placeholder="Seu nome" />
+                        </div>
+                        <span asp-validation-for="Input.Nome" class="text-danger small"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Sobrenome" class="form-label fw-semibold">Sobrenome</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input asp-for="Input.Sobrenome" class="form-control" placeholder="Seu sobrenome" />
+                        </div>
+                        <span asp-validation-for="Input.Sobrenome" class="text-danger small"></span>
+                    </div>
+                </div>
 
                 <div class="mb-3">
                     <label asp-for="Input.Email" class="form-label fw-semibold">E-mail</label>
