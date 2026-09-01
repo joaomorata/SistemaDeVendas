@@ -1,13 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY TelaLoginCrud/TelaLoginCrud.csproj TelaLoginCrud/
-RUN dotnet restore TelaLoginCrud/TelaLoginCrud.csproj
+COPY SistemaDeVendas/SistemaDeVendas.csproj SistemaDeVendas/
+RUN dotnet restore SistemaDeVendas/SistemaDeVendas.csproj
 COPY . .
-RUN dotnet publish TelaLoginCrud/TelaLoginCrud.csproj -c Release -o /app /p:UseAppHost=false
+RUN dotnet publish SistemaDeVendas/SistemaDeVendas.csproj -c Release -o /app /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app .
 ENV ASPNETCORE_URLS=http://+:10000
 EXPOSE 10000
-ENTRYPOINT ["dotnet", "TelaLoginCrud.dll"]
+ENTRYPOINT ["dotnet", "SistemaDeVendas.dll"]

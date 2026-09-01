@@ -1,4 +1,4 @@
-# 🛒 TelaLoginCrud
+# 🛒 SistemaDeVendas
 
 Sistema desenvolvido em **ASP.NET Core MVC** utilizando a linguagem **C#** e o padrão arquitetural **Model-View-Controller (MVC)**.
 
@@ -66,26 +66,26 @@ A interface foi desenvolvida utilizando:
 
 ## Tela de Login (Acesse sua Conta)
 
-![Tela Inicial](TelaLoginCrud/imagens/tela-inicial.png)
+![Tela Inicial](SistemaDeVendas/imagens/tela-inicial.png)
 
 ## Tela de Cadastro de Usuário (Criar Nova Conta)
 
-![Tela cadastro](TelaLoginCrud/imagens/tela_cadastro.png)
+![Tela cadastro](SistemaDeVendas/imagens/tela_cadastro.png)
 
 ## Painel de Vendas (Listagem)
 
-![Painel venda](TelaLoginCrud/imagens/painel-venda.png)
+![Painel venda](SistemaDeVendas/imagens/painel-venda.png)
 
 ## Cadastrar Nova Venda
 
-![cadastro venda](TelaLoginCrud/imagens/cadastro-venda.png)
+![cadastro venda](SistemaDeVendas/imagens/cadastro-venda.png)
 
 # ▶️ Como Executar o Projeto
 
 ## Clone o repositório
 
 ```bash
-git clone https://github.com/joaomorata/TelaLoginCrud.git
+git clone https://github.com/joaomorata/SistemaDeVendas.git
 
 ```
 
@@ -129,7 +129,7 @@ Pressione **F5** ou clique em **Iniciar** no Visual Studio.
 # 📂 Estrutura do Projeto
 
 ```text
-TelaLoginCrud
+SistemaDeVendas
 │
 ├── Areas
 │   └── Identity

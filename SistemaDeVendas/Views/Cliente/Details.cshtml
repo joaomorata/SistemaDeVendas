@@ -1,0 +1,76 @@
+@model SistemaDeVendas.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalhes do Cliente";
+}
+
+<div class="container my-4" style="max-width: 640px;">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-header bg-info text-white py-3">
+            <h4 class="mb-0 fw-bold fs-5"><i class="bi bi-person-vcard me-2"></i>@Model.Nome</h4>
+        </div>
+        <div class="card-body p-4">
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between py-3">
+                    <span class="text-muted fw-semibold"><i class="bi bi-telephone me-2"></i>Telefone</span>
+                    <span>@(string.IsNullOrWhiteSpace(Model.Telefone) ? "-" : Model.Telefone)</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between py-3">
+                    <span class="text-muted fw-semibold"><i class="bi bi-geo-alt me-2"></i>Endereço</span>
+                    <span class="text-end">@Model.Endereco<br />@Model.Bairro @Model.Cidade @Model.Cep</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between py-3">
+                    <span class="text-muted fw-semibold"><i class="bi bi-pin-map me-2"></i>Coordenadas</span>
+                    <span>
+                        @if (Model.Latitude != null && Model.Longitude != null)
+                        {
+                            @($"{Model.Latitude:0.#####}, {Model.Longitude:0.#####}")
+                        }
+                        else
+                        {
+                            <span class="text-danger">não localizadas</span>
+                        }
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between py-3">
+                    <span class="text-muted fw-semibold"><i class="bi bi-calendar3 me-2"></i>Cadastrado em</span>
+                    <span>@Model.DataCadastro.ToString("dd/MM/yyyy")</span>
+                </li>
+            </ul>
+
+            <h6 class="fw-bold text-uppercase small text-muted mb-2">Pacotes</h6>
+            @if (Model.Pacotes.Any())
+            {
+                <ul class="list-group mb-4">
+                    @foreach (var pacote in Model.Pacotes)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>@pacote.Descricao <span class="text-muted small">(@pacote.Peso.ToString("0.00") kg)</span></span>
+                            @if (pacote.Coletado)
+                            {
+                                <span class="badge bg-success rounded-pill">Coletado</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark rounded-pill">Pendente</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted small mb-4">Nenhum pacote registrado para este cliente.</p>
+            }
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Voltar
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning rounded-pill px-4 fw-semibold">
+                    <i class="bi bi-pencil-square me-1"></i> Editar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
