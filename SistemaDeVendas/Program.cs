@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using SistemaDeVendas.Areas.Identity.Data;
 using SistemaDeVendas.Services;
 
@@ -7,7 +8,38 @@ using SistemaDeVendas.Services;
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SistemaDeVendasContextConnection") ?? throw new InvalidOperationException("Connection string 'SistemaDeVendasContextConnection' not found.");
+
+// Em producao (Render/Supabase) a conexao chega como URL: postgresql://user:senha@host:porta/banco
+// O Npgsql nao aceita esse formato, entao convertemos para o formato "chave=valor".
+// Prioridade: DATABASE_URL (env) > ConnectionStrings:SistemaDeVendasContextConnection (env/appsettings/user-secrets).
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connectionString = !string.IsNullOrWhiteSpace(databaseUrl)
+    ? BuildNpgsqlConnectionString(databaseUrl)
+    : builder.Configuration.GetConnectionString("SistemaDeVendasContextConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new InvalidOperationException(
+        "Connection string nao encontrada. Defina a variavel de ambiente DATABASE_URL " +
+        "ou ConnectionStrings__SistemaDeVendasContextConnection.");
+
+static string BuildNpgsqlConnectionString(string url)
+{
+    var uri = new Uri(url);
+    var userInfo = uri.UserInfo.Split(':', 2);
+
+    var csb = new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.IsDefaultPort ? 5432 : uri.Port,
+        Username = Uri.UnescapeDataString(userInfo[0]),
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+        Database = uri.AbsolutePath.Trim('/'),
+        SslMode = SslMode.Require,
+        TrustServerCertificate = true
+    };
+
+    return csb.ConnectionString;
+}
 
 builder.Services.AddDbContext<SistemaDeVendasContext>(options => options.UseNpgsql(connectionString));
 
