@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Início";
+}
+
+<div class="container my-4">
+    <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+        <div class="card-body p-4 p-lg-5" style="background: linear-gradient(135deg, #4c1d95, #7c3aed); color: #fff;">
+            <span class="badge bg-white text-dark rounded-pill mb-3 px-3 py-2">Painel do administrador</span>
+            <h1 class="fw-bold mb-2">Rotas de coleta, do cadastro à entrega</h1>
+            <p class="mb-4 opacity-75">Cadastre clientes, registre os pacotes e gere a melhor rota para recolher tudo em uma volta só.</p>
+            <a asp-controller="Rota" asp-action="Create" class="btn btn-light rounded-pill px-4 fw-semibold">
+                <i class="bi bi-geo-alt-fill me-1"></i> Montar nova rota
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="card card-hover border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-people-fill fs-2 text-primary"></i>
+                    <div class="fs-3 fw-bold">@ViewBag.TotalClientes</div>
+                    <div class="text-muted small">Clientes</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card card-hover border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-box-seam-fill fs-2 text-warning"></i>
+                    <div class="fs-3 fw-bold">@ViewBag.PacotesPendentes</div>
+                    <div class="text-muted small">Pacotes pendentes</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card card-hover border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-signpost-split-fill fs-2 text-success"></i>
+                    <div class="fs-3 fw-bold">@ViewBag.RotasAbertas</div>
+                    <div class="text-muted small">Rotas em aberto</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card card-hover border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-cart-check-fill fs-2 text-secondary"></i>
+                    <div class="fs-3 fw-bold">@ViewBag.TotalVendas</div>
+                    <div class="text-muted small">Vendas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a asp-controller="Cliente" asp-action="Index" class="card card-hover border-0 shadow-sm rounded-4 h-100 text-decoration-none text-reset">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-people fs-3 text-primary"></i>
+                    <div>
+                        <div class="fw-semibold">Clientes</div>
+                        <div class="text-muted small">Cadastro e endereços</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="Pacote" asp-action="Index" class="card card-hover border-0 shadow-sm rounded-4 h-100 text-decoration-none text-reset">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-box-seam fs-3 text-warning"></i>
+                    <div>
+                        <div class="fw-semibold">Pacotes</div>
+                        <div class="text-muted small">Itens a coletar por cliente</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="Rota" asp-action="Index" class="card card-hover border-0 shadow-sm rounded-4 h-100 text-decoration-none text-reset">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <i class="bi bi-signpost-split fs-3 text-success"></i>
+                    <div>
+                        <div class="fw-semibold">Rotas</div>
+                        <div class="text-muted small">Trajetos gerados</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

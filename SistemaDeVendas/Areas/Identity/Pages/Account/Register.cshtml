@@ -1,0 +1,82 @@
+﻿@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Criar Conta";
+}
+
+<div class="container my-5" style="max-width: 480px;">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-header bg-success text-white text-center py-4">
+            <i class="bi bi-person-plus-fill fs-1 d-block mb-2"></i>
+            <h3 class="fw-bold mb-0 fs-4">Criar Nova Conta</h3>
+            <p class="text-white-50 small mb-0">Preencha os dados abaixo para se cadastrar</p>
+        </div>
+        <div class="card-body p-4">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Nome" class="form-label fw-semibold">Nome</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input asp-for="Input.Nome" class="form-control" placeholder="Seu nome" />
+                        </div>
+                        <span asp-validation-for="Input.Nome" class="text-danger small"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Sobrenome" class="form-label fw-semibold">Sobrenome</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                            <input asp-for="Input.Sobrenome" class="form-control" placeholder="Seu sobrenome" />
+                        </div>
+                        <span asp-validation-for="Input.Sobrenome" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label fw-semibold">E-mail</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="seu-email@exemplo.com" />
+                    </div>
+                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label fw-semibold">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Input.ConfirmPassword" class="form-label fw-semibold">Confirmar Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-check2-circle"></i></span>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="••••••••" />
+                    </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-success rounded-pill py-2 fw-semibold">
+                    <i class="bi bi-person-check-fill me-1"></i> Cadastrar
+                </button>
+            </form>
+
+            <hr class="my-4 text-muted" />
+
+            <div class="text-center">
+                <span class="text-muted small">Já possui uma conta?</span>
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="fw-semibold text-decoration-none ms-1">Fazer Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

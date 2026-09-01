@@ -1,0 +1,61 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Entrar no Sistema";
+}
+
+<div class="container my-5" style="max-width: 480px;">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-header bg-primary text-white text-center py-4">
+            <i class="bi bi-person-lock fs-1 d-block mb-2"></i>
+            <h3 class="fw-bold mb-0 fs-4">Acesse sua Conta</h3>
+            <p class="text-white-50 small mb-0">Insira suas credenciais para continuar</p>
+        </div>
+        <div class="card-body p-4">
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label fw-semibold">E-mail</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="seuu-email@exemplo.com" />
+                    </div>
+                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label fw-semibold">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="••••••••" />
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label text-muted small" asp-for="Input.RememberMe">
+                        Lembrar-me
+                    </label>
+                </div>
+
+                <button id="login-submit" type="submit" class="w-100 btn btn-primary rounded-pill py-2 fw-semibold">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
+                </button>
+            </form>
+
+            <hr class="my-4 text-muted" />
+
+            <div class="text-center">
+                <span class="text-muted small">Ainda não tem uma conta?</span>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="fw-semibold text-decoration-none ms-1">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

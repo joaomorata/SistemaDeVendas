@@ -1,0 +1,44 @@
+@model SistemaDeVendas.Models.Cliente
+
+@{
+    ViewData["Title"] = "Excluir Cliente";
+}
+
+<div class="container my-4" style="max-width: 600px;">
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-header bg-danger text-white py-3">
+            <h4 class="mb-0 fw-bold fs-5"><i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Exclusão</h4>
+        </div>
+        <div class="card-body p-4">
+            <div class="alert alert-warning border-0 d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-exclamation-diamond-fill fs-4 me-3 text-warning"></i>
+                <div>
+                    <strong>Atenção:</strong> deseja remover este cliente? Os pacotes ligados a ele também serão removidos.
+                </div>
+            </div>
+
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item d-flex justify-content-between py-2">
+                    <span class="text-muted">Nome:</span>
+                    <span class="fw-bold">@Model.Nome</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between py-2">
+                    <span class="text-muted">Endereço:</span>
+                    <span>@Model.Endereco - @Model.Cidade</span>
+                </li>
+            </ul>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">
+                        <i class="bi bi-trash-fill me-1"></i> Sim, Excluir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
