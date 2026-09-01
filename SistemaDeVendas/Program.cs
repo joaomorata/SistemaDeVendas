@@ -22,6 +22,10 @@ if (string.IsNullOrWhiteSpace(connectionString))
         "Connection string nao encontrada. Defina a variavel de ambiente DATABASE_URL " +
         "ou ConnectionStrings__SistemaDeVendasContextConnection.");
 
+// Diagnostico: mostra para onde vamos conectar (sem a senha).
+var diag = new NpgsqlConnectionStringBuilder(connectionString);
+Console.WriteLine($"[DB] Host={diag.Host} Port={diag.Port} Username={diag.Username} Database={diag.Database} SslMode={diag.SslMode}");
+
 static string BuildNpgsqlConnectionString(string url)
 {
     var uri = new Uri(url);
