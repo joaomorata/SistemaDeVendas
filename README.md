@@ -182,5 +182,7 @@ SistemaDeVendas/
 
 ## 👨‍💻 Autores
 
-**Desenvolvedor:** João Pedro Rabelo Schoettner Morata
-**Professor:** Wallace Oliveira dos Santos
+**Desenvolvedor:** 
+João Pedro Rabelo Schoettner Morata
+Manoel Almeida de Morais
+
