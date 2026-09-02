@@ -1,189 +1,186 @@
-# 🛒 SistemaDeVendas
+# 🚚 SistemaDeVendas
 
-Sistema desenvolvido em **ASP.NET Core MVC** utilizando a linguagem **C#** e o padrão arquitetural **Model-View-Controller (MVC)**.
+Aplicação web em **ASP.NET Core MVC (.NET 8)** para gestão de **clientes, pacotes e rotas de entrega/coleta**, com autenticação de usuários via **ASP.NET Core Identity** e **otimização automática de rotas** a partir das coordenadas geográficas dos clientes.
 
-O projeto tem como objetivo demonstrar a implementação de um sistema CRUD (Create, Read, Update e Delete) para gerenciamento de vendas e controle de acesso com autenticação de usuários (ASP.NET Core Identity), utilizando boas práticas de desenvolvimento, persistência de dados com Entity Framework Core e interface responsiva com Bootstrap.
-
----
-
-## 📋 Tecnologias Utilizadas
-
-* C#
-* .NET
-* ASP.NET Core MVC
-* ASP.NET Core Identity (Autenticação e Autorização)
-* SQL Server
-* Entity Framework Core
-* Bootstrap 5
-* jQuery
+O projeto nasceu como um CRUD simples de vendas (`TelaLoginCrud`) e evoluiu para um sistema de logística: cadastra-se o cliente, o endereço é geocodificado, os pacotes são vinculados a ele e uma rota é montada escolhendo os clientes a visitar — o sistema calcula a melhor ordem de visita e a distância total.
 
 ---
 
-## 📦 Pacotes Utilizados
+## 📋 Tecnologias
 
-O projeto utiliza os seguintes pacotes do Entity Framework Core:
+| Camada | Stack |
+|---|---|
+| Backend | C# / .NET 8 / ASP.NET Core MVC |
+| Autenticação | ASP.NET Core Identity (Razor Pages) |
+| ORM | Entity Framework Core 8 (Code First + Migrations) |
+| Banco de dados | PostgreSQL (Npgsql) |
+| Geocodificação | API pública [Nominatim / OpenStreetMap](https://nominatim.openstreetmap.org/) |
+| Frontend | Razor Views, Bootstrap 5, Bootstrap Icons, jQuery |
+| Deploy | Docker + [Render](https://render.com) |
 
-* Microsoft.EntityFrameworkCore
-* Microsoft.EntityFrameworkCore.SqlServer
-* Microsoft.EntityFrameworkCore.Tools
-* Microsoft.EntityFrameworkCore.Design
-* Microsoft.VisualStudio.Web.CodeGeneration.Design
+### Pacotes NuGet
 
----
-
-## 🗄 Banco de Dados
-
-O banco de dados foi desenvolvido utilizando o **SQL Server**.
-
-A criação da estrutura do banco foi realizada através da abordagem **Code First**, utilizando **Migrations** do Entity Framework Core.
-
----
-
-# 🚀 Funcionalidades
-
-* Autenticação de Usuários (Login, Cadastro e Gerenciamento de Sessão)
-* Cadastro de Vendas
-* Alteração de registros de vendas
-* Exclusão de registros
-* Consulta de dados com formatação financeira e datas
-* Cálculo automático de totais (Quantidade total e Valor financeiro total)
-* Interface responsiva com suporte a Bootstrap Icons
+- `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+- `Microsoft.AspNetCore.Identity.UI`
+- `Npgsql.EntityFrameworkCore.PostgreSQL`
+- `Microsoft.EntityFrameworkCore.Tools`
+- `Microsoft.VisualStudio.Web.CodeGeneration.Design`
 
 ---
 
-## 🎨 Interface
+## 🚀 Funcionalidades
 
-A interface foi desenvolvida utilizando:
+### Autenticação
+- Cadastro, login, logout e redefinição de senha (ASP.NET Core Identity)
+- Usuário estendido com `Nome` e `Sobrenome`
+- Todos os controllers de negócio exigem usuário autenticado (`[Authorize]`)
 
-* Bootstrap 5
-* Bootstrap Icons
-* Razor Views
-* jQuery
+### Clientes
+- CRUD completo
+- Geocodificação automática do endereço no cadastro/edição (latitude/longitude via Nominatim)
+- Cada cliente possui uma lista de pacotes
+
+### Pacotes
+- CRUD completo, vinculado a um cliente
+- Controle de peso (kg) e situação de coleta (`Coletado`)
+
+### Rotas
+- Criação de rota a partir de um **endereço de partida** e da seleção de **clientes com coordenadas**
+- **Otimização automática da ordem de visita** (`Services/OtimizadorRota.cs`):
+  - Heurística do **vizinho mais próximo** para a solução inicial
+  - Refinamento **2-opt**
+  - Distâncias calculadas pela fórmula de **Haversine** (km)
+- Fluxo de status: `Planejada → EmAndamento → Concluída`
+- Registro de coleta por parada: marca a parada como visitada, marca os pacotes do cliente como coletados e conclui a rota automaticamente quando todas as paradas são visitadas
+
+### Vendas (módulo original)
+- CRUD de vendas (produto, quantidade, preço, data)
+
+### Operação
+- Endpoint de health check em `GET /healthz`
+- Migrations aplicadas automaticamente no startup (`db.Database.Migrate()`)
+- Suporte a proxy reverso via `ForwardedHeaders` (deploy atrás do Render)
 
 ---
 
-# 📷 Telas do Sistema
+## 🗄 Banco de dados
 
-## Tela de Login (Acesse sua Conta)
+Modelagem **Code First** com Migrations do EF Core. Entidades principais:
 
-![Tela Inicial](SistemaDeVendas/imagens/tela-inicial.png)
+- `Usuario` (Identity) · `Venda` · `Cliente` · `Pacote` · `Rota` · `RotaParada`
+- Enum `StatusRota` (`Planejada`, `EmAndamento`, `Concluida`)
 
-## Tela de Cadastro de Usuário (Criar Nova Conta)
+A string de conexão é resolvida nesta ordem (ver `Program.cs`):
 
-![Tela cadastro](SistemaDeVendas/imagens/tela_cadastro.png)
+1. Variável de ambiente **`DATABASE_URL`** no formato URL
+   (`postgresql://usuario:senha@host:porta/banco`) — usada em produção (Render/Supabase);
+   convertida internamente para o formato chave=valor do Npgsql, com `SslMode=Require`.
+2. `ConnectionStrings:SistemaDeVendasContextConnection`
+   (env `ConnectionStrings__SistemaDeVendasContextConnection`, `appsettings.json` ou **user-secrets**).
 
-## Painel de Vendas (Listagem)
+Se nenhuma for encontrada, a aplicação lança exceção no startup.
 
-![Painel venda](SistemaDeVendas/imagens/painel-venda.png)
+---
 
-## Cadastrar Nova Venda
+## ▶️ Como executar localmente
 
-![cadastro venda](SistemaDeVendas/imagens/cadastro-venda.png)
+### Pré-requisitos
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download)
+- PostgreSQL em execução (local ou em container)
+- (Opcional) [EF Core CLI](https://learn.microsoft.com/ef/core/cli/dotnet): `dotnet tool install --global dotnet-ef`
 
-# ▶️ Como Executar o Projeto
-
-## Clone o repositório
+### Passos
 
 ```bash
-git clone https://github.com/joaomorata/SistemaDeVendas.git
+# 1. Clonar
+git clone https://github.com/joaomorata/TelaLoginCrud.git
+cd TelaLoginCrud
 
-```
+# 2. Configurar a conexão via user-secrets (recomendado)
+cd SistemaDeVendas
+dotnet user-secrets set "ConnectionStrings:SistemaDeVendasContextConnection" \
+  "Host=localhost;Port=5432;Database=sistemadevendas;Username=postgres;Password=SUA_SENHA"
 
-## Abra a solução
-
-Abra o projeto utilizando o **Visual Studio 2022**.
-
-## Configure a conexão
-
-Edite o arquivo:
-
-```json
-appsettings.json
-
-```
-
-Configurando a string de conexão para a sua instância do SQL Server.
-
-## Execute as Migrations
-
-No Console do Gerenciador de Pacotes execute:
-
-```powershell
-Update-Database
-
-```
-
-Ou utilize o .NET CLI:
-
-```bash
+# 3. Aplicar as migrations (o startup também faz isso automaticamente)
 dotnet ef database update
 
+# 4. Rodar
+dotnet run
 ```
 
-## Execute o projeto
+A aplicação sobe em `http://localhost:5112` (perfil `http` de `launchSettings.json`).
 
-Pressione **F5** ou clique em **Iniciar** no Visual Studio.
+> Alternativa à etapa 2: definir a variável de ambiente
+> `DATABASE_URL=postgresql://postgres:SUA_SENHA@localhost:5432/sistemadevendas`.
 
 ---
 
-# 📂 Estrutura do Projeto
+## 🐳 Docker
+
+```bash
+docker build -t sistemadevendas .
+docker run -p 10000:10000 -e DATABASE_URL="postgresql://user:senha@host:5432/banco" sistemadevendas
+```
+
+O `Dockerfile` publica em Release, expõe a porta **10000** (`ASPNETCORE_URLS=http://+:10000`) e desativa o file watcher de configuração (limite de inotify baixo em containers do Render).
+
+---
+
+## ☁️ Deploy no Render
+
+- Serviço do tipo **Web Service** usando o `Dockerfile` do repositório
+- Banco **PostgreSQL** (Render ou Supabase); definir a variável `DATABASE_URL`
+- Health check path: `/healthz`
+- As migrations rodam sozinhas na primeira inicialização
+
+---
+
+## 📂 Estrutura do projeto
 
 ```text
-SistemaDeVendas
-│
-├── Areas
-│   └── Identity
-├── Controllers
+SistemaDeVendas/
+├── Areas/Identity/            # Autenticação (Identity + Razor Pages)
+│   ├── Data/
+│   │   ├── SistemaDeVendasContext.cs   # DbContext (IdentityDbContext<Usuario>)
+│   │   └── Usuario.cs
+│   └── Pages/Account/         # Login, Register, Logout, ResetPassword...
+├── Controllers/
 │   ├── HomeController.cs
+│   ├── ClienteController.cs
+│   ├── PacoteController.cs
+│   ├── RotaController.cs
 │   └── VendaController.cs
-├── Migrations
-├── Models
-│   ├── ErrorViewModel.cs
-│   └── Venda.cs
-├── Views
-│   ├── Home
-│   │   ├── Index.cshtml
-│   │   └── Privacy.cshtml
-│   ├── Shared
-│   │   ├── _Layout.cshtml
-│   │   ├── _LoginPartial.cshtml
-│   │   ├── _ValidationScriptsPartial.cshtml
-│   │   └── Error.cshtml
-│   └── Venda
-│       ├── Create.cshtml
-│       ├── Delete.cshtml
-│       ├── Details.cshtml
-│       ├── Edit.cshtml
-│       └── Index.cshtml
-├── wwwroot
-│   ├── css
-│   │   └── site.css
-│   ├── js
-│   └── lib
+├── Models/
+│   ├── Cliente.cs  Pacote.cs  Rota.cs  RotaParada.cs  StatusRota.cs
+│   ├── Venda.cs
+│   ├── RotaCreateViewModel.cs
+│   └── ErrorViewModel.cs
+├── Services/
+│   ├── GeocodingService.cs    # Consulta ao Nominatim/OpenStreetMap
+│   └── OtimizadorRota.cs      # Vizinho mais próximo + 2-opt + Haversine
+├── Migrations/                # EF Core (InitialPg)
+├── Views/                     # Razor Views (Home, Cliente, Pacote, Rota, Venda, Shared)
+├── wwwroot/                   # css, js, libs estáticas
 ├── appsettings.json
-└── Program.cs
-
+├── Program.cs                 # Bootstrap, resolução de conexão, DI, pipeline
+└── Dockerfile
 ```
 
 ---
 
-# 💻 Desenvolvido com
+## 📷 Telas
 
-* ASP.NET Core MVC
-* C#
-* SQL Server
-* Entity Framework Core
-* ASP.NET Core Identity
-* Bootstrap 5
+| Login | Cadastro de usuário |
+|---|---|
+| ![Login](SistemaDeVendas/imagens/tela-inicial.png) | ![Cadastro](SistemaDeVendas/imagens/tela_cadastro.png) |
+
+| Painel de vendas | Cadastro de venda |
+|---|---|
+| ![Painel de vendas](SistemaDeVendas/imagens/painel-venda.png) | ![Cadastro de venda](SistemaDeVendas/imagens/cadastro-venda.png) |
 
 ---
 
-# 👨‍💻 Autores
+## 👨‍💻 Autores
 
-### Desenvolvedor
-
-**João Pedro Rabelo Schoettner Morata**
-
-### Professor
-
-**Wallace Oliveira dos Santos**
+**Desenvolvedor:** João Pedro Rabelo Schoettner Morata
+**Professor:** Wallace Oliveira dos Santos
